@@ -166,6 +166,13 @@ namespace Plugin.NFC
 					Invalidate(session, Configuration.Messages.NFCErrorNotCompliantTag);
 					return;
 				}
+				
+				var getBytes = GetTagIdentifier(ndefTag);
+				
+				var testing = new TagInfo(getBytes, true);
+				OnMessageReceived.Invoke(testing);
+				Invalidate(session);
+				return;
 
 				ndefTag.QueryNdefStatus((status, capacity, error) =>
 				{
