@@ -165,9 +165,8 @@ namespace Plugin.NFC
 				}
 
 				var getBytes = NfcNdefTagExtensions.GetTagIdentifier(ndefTag);
-
-				var testing = new TagInfo(getBytes, true);
-				OnMessageReceived.Invoke(testing);
+				var getTagInfo = new TagInfo(getBytes, true);
+				OnMessageReceived.Invoke(getTagInfo);
 				Invalidate(session);
 				return;
 
