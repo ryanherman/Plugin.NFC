@@ -247,7 +247,7 @@ namespace Plugin.NFC
 				OniOSReadingSessionCancelled?.Invoke(null, EventArgs.Empty);
 				DispatchQueue.MainQueue.DispatchAsync(() =>
 				{
-					GetCurrentController().PresentViewController(alertController, true, null);
+					//GetCurrentController().PresentViewController(alertController, true, null);
 				});
 			}
 			else if (readerError == NFCReaderError.ReaderSessionInvalidationErrorUserCanceled && !_customInvalidation)
