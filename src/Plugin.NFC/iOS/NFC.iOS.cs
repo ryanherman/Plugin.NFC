@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using UIKit;
 
 namespace Plugin.NFC
@@ -79,7 +80,10 @@ namespace Plugin.NFC
 
 			NfcSession =
 				new NFCTagReaderSession(NFCPollingOption.Iso14443 | NFCPollingOption.Iso15693, this,
-					DispatchQueue.CurrentQueue) { AlertMessage = Configuration.Messages.NFCDialogAlertMessage };
+					DispatchQueue.CurrentQueue)
+				{
+					AlertMessage = Configuration.Messages.NFCDialogAlertMessage
+				};
 			NfcSession?.BeginSession();
 			OnTagListeningStatusChanged?.Invoke(true);
 		}
@@ -147,7 +151,7 @@ namespace Plugin.NFC
 			_tag = tags.First();
 
 			var connectionError = string.Empty;
-			session.ConnectTo(_tag, (error) =>
+			session.ConnectTo(_tag, async (error) =>
 			{
 				if (error != null)
 				{
@@ -160,14 +164,16 @@ namespace Plugin.NFC
 
 				if (ndefTag == null)
 				{
-					Invalidate(session, Configuration.Messages.NFCErrorNotCompliantTag);
+					//Invalidate(session, Configuration.Messages.NFCErrorNotCompliantTag);
 					return;
 				}
 
 				var getBytes = NfcNdefTagExtensions.GetTagIdentifier(ndefTag);
 				var getTagInfo = new TagInfo(getBytes, true);
 				OnMessageReceived.Invoke(getTagInfo);
-				Invalidate(session);
+				await Task.Delay(2000);
+				session.RestartPolling();
+				//Invalidate(session);
 				return;
 
 				ndefTag.QueryNdefStatus((status, capacity, error) =>
