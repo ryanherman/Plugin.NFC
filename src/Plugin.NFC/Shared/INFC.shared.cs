@@ -20,6 +20,8 @@ namespace Plugin.NFC
 		/// </summary>
 		bool IsAvailable { get; }
 
+		bool rapidScan { get; set; }
+
 		/// <summary>
 		/// Checks if NFC Feature is enabled
 		/// </summary>

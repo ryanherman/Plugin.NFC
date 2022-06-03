@@ -31,6 +31,8 @@ namespace Plugin.NFC
 		bool _isFormatting;
 		bool _customInvalidation = false;
 
+		public bool rapidScan { get; set; }
+
 		INFCTag _tag;
 
 		NFCTagReaderSession NfcSession { get; set; }
@@ -171,9 +173,14 @@ namespace Plugin.NFC
 				var getBytes = NfcNdefTagExtensions.GetTagIdentifier(ndefTag);
 				var getTagInfo = new TagInfo(getBytes, true);
 				OnMessageReceived.Invoke(getTagInfo);
-				await Task.Delay(2000);
-				session.RestartPolling();
-				//Invalidate(session);
+				if (rapidScan)
+				{
+					await Task.Delay(2000);
+					session.RestartPolling();
+				} else
+				{
+					Invalidate(session);
+				}
 				return;
 
 				ndefTag.QueryNdefStatus((status, capacity, error) =>
@@ -480,7 +487,7 @@ namespace Plugin.NFC
 		public event TagListeningStatusChangedEventHandler OnTagListeningStatusChanged;
 
 		NFCNdefReaderSession NfcSession { get; set; }
-
+		public bool rapidScan { get; set; }
 		/// <summary>
 		/// Checks if NFC Feature is available
 		/// </summary>
