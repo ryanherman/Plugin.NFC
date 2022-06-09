@@ -68,7 +68,7 @@ namespace Plugin.NFC
 		/// NFC configuration
 		/// </summary>
 		public NfcConfiguration Configuration { get; private set; }
-		public bool rapidScan { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+		public bool rapidScan { get; set; }
 
 		/// <summary>
 		/// Default constructor
