@@ -52,8 +52,8 @@ namespace Plugin.NFC
 
         static INFC CreateNFC()
         {
-#if NETSTANDARD1_0 || NETSTANDARD2_0
-            return null;
+#if NETSTANDARD || !__MOBILE__
+	        return null;
 #elif __IOS__
 			ObjCRuntime.Class.ThrowOnInitFailure = false;
 			if (NFCUtils.IsWritingSupported() && !Legacy)

@@ -1283,6 +1283,19 @@ namespace Plugin.NFC
 				return null;
 
 			INFCNdefTag ndef;
+
+#if NET6_0_OR_GREATER
+			if (tag.Type == CoreNFC.NFCTagType.MiFare)
+				ndef = tag.AsNFCMiFareTag;
+			else if (tag.Type == CoreNFC.NFCTagType.Iso7816Compatible)
+				ndef = tag.AsNFCIso7816Tag;
+			else if (tag.Type == CoreNFC.NFCTagType.Iso15693)
+				ndef = tag.AsNFCIso15693Tag;
+			else if (tag.Type == CoreNFC.NFCTagType.FeliCa)
+				ndef = tag.AsNFCFeliCaTag;
+			else
+				ndef = null;
+#else
 			if (tag.GetNFCMiFareTag() != null)
 				ndef = tag.GetNFCMiFareTag();
 			else if (tag.GetNFCIso7816Tag() != null)
@@ -1293,6 +1306,7 @@ namespace Plugin.NFC
 				ndef = tag.GetNFCFeliCaTag();
 			else
 				ndef = null;
+#endif
 
 			return ndef;
 		}
